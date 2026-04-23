@@ -5,25 +5,23 @@ on:
     branches:
       - main
 
-# Node.js 20 지원 종료 경고를 해결하기 위한 설정
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-  
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4 # v3 -> v4 업데이트
+      # Node 24를 정식 지원하는 v4.2.2 이상의 최신 배포판을 사용합니다.
+      uses: actions/checkout@v4.2.2 
 
     - name: Set up Python
-      uses: actions/setup-python@v5 # v3 -> v5 업데이트
+      # setup-python 역시 최신 마이너 버전을 사용합니다.
+      uses: actions/setup-python@v5.3.0
       with:
         python-version: '3.11'
 
     - name: Build Flask Docker image
-      run: docker image build -t myflask-test .  # . 앞에 공백 있음
+      run: docker image build -t myflask-test .
 
     - name: Run Flask Docker container
       run: docker container run -d --name myflask-ac -p 8001:8001 myflask-test
